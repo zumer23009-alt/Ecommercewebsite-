@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useStore } from '../context/StoreContext';
+import { useStore } from './StoreContext';
 
 export default function Cart() {
   const { cart, updateQty, removeFromCart, cartTotal, currency, applyCoupon, appliedCoupon, whatsapp } = useStore();
