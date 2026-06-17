@@ -1,8 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { store, Product } from '../data/store';
-import ProductCard from '../components/ProductCard';
-
+import { store, Product } from './store';
+import ProductCard from './ProductCard';
 export default function Products() {
   const [params] = useSearchParams();
   const cat = params.get('cat') || '';
