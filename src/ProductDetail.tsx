@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { store, Product } from '../data/store';
-import { useStore } from '../context/StoreContext';
-import ProductCard from '../components/ProductCard';
+import { store, Product } from './store';
+import { useStore } from './StoreContext';
+import ProductCard from './ProductCard';
 
 export default function ProductDetail() {
   const { id } = useParams();
