@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { store, Product } from '../data/store';
-import ProductCard from '../components/ProductCard';
+import { store, Product } from './store';
+import ProductCard from './ProductCard';
 
 export default function Home() {
   const data = store.load();
