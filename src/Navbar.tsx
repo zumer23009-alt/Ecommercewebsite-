@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useStore } from '../StoreContext';
+import { useStore } from './StoreContext';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
