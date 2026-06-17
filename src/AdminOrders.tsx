@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import AdminLayout from '../../components/AdminLayout';
-import { store, Order } from '../../data/store';
+import AdminLayout from './AdminLayout';
+import { store, Order } from './store';
 
 const STATUSES: Order['status'][] = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 
