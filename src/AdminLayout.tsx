@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { store } from '../data/store';
+import { store } from './store';
 
 export default function AdminLayout({ children, title }: { children: ReactNode; title: string }) {
   const navigate = useNavigate();
