@@ -3,7 +3,7 @@ import { useStore } from './context/StoreContext';
 
 export default function WhatsAppButton() {
   const [open, setOpen] = useState(false);
-  const { whatsapp, storeName } = useStore();
+  const { whatsapp, storeName } = store'; 
 
   const message = encodeURIComponent(`Bonjour ${storeName}! Je voudrais des informations sur vos produits.`);
   const href = `https://wa.me/${whatsapp}?text=${message}`;
