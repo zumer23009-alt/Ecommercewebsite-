@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import AdminLayout from '../../components/AdminLayout';
-import { store, Category, uid } from '../../data/store';
+import AdminLayout from './AdminLayout';
+import { store, Category, uid } from './store';
 
 export default function AdminCategories() {
   const data = store.load();
