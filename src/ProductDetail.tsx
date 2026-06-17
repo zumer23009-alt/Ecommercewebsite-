@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { store, Product } from './store';
-import { useStore } from './StoreContext';
 import ProductCard from './ProductCard';
 
 export default function ProductDetail() {
@@ -9,7 +8,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const data = store.load();
   const product = data.products.find((p) => p.id === id);
-  const { addToCart, toggleWishlist, wishlist, currency, whatsapp } = useStore();
+  const { addToCart, toggleWishlist, wishlist, currency, whatsapp } = store;
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
