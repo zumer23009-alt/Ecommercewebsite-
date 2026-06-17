@@ -1,5 +1,5 @@
-import AdminLayout from '../../components/AdminLayout';
-import { store } from '../../data/store';
+import AdminLayout from './AdminLayout';
+import { store } from './store';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
