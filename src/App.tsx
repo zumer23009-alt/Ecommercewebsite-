@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { StoreProvider } from './Storecontext';
+import { StoreProvider } from './StoreContext';
 import { useEffect } from 'react';
 
 // Public components
