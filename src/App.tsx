@@ -3,26 +3,35 @@ import { StoreProvider } from './StoreContext';
 import { useEffect } from 'react';
 
 // Public components
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import WhatsAppButton from './components/WhatsAppButton';
+import Navbar from './Navbar';
+import Footer from './Footer';
+import WhatsAppButton from './WhatsAppButton';
 
-// Public pages
-import Home from './pages/Home';
-import Products from './pages/Products';
-import ProductDetail from './pages/ProductDetail';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
-import Account from './pages/Account';
-import Wishlist from './pages/Wishlist';
+import Home from './Home';
+import Products from './Products';
+import ProductDetail from './ProductDetail';
+import Cart from './Cart';
+import Checkout from './Checkout';
+import Account from './Account';
+import Wishlist from './Wishlist';
 
-// Admin pages
-import AdminLogin from './pages/admin/AdminLogin';
-import Dashboard from './pages/admin/Dashboard';
-import { AdminProductsList, AdminProductForm } from './pages/admin/AdminProducts';
-import AdminCategories from './pages/admin/AdminCategories';
-import { AdminOrdersList, AdminOrderDetail } from './pages/admin/AdminOrders';
-import { AdminCustomers, AdminCoupons, AdminBanners, AdminReviews, AdminNewsletter, AdminMedia, AdminSettings } from './pages/admin/AdminMisc';
+import AdminLogin from './AdminLogin';
+import Dashboard from './Dashboard';
+
+import { AdminProductsList, AdminProductForm } from './AdminProducts';
+import AdminCategories from './AdminCategories';
+
+import { AdminOrdersList, AdminOrderDetail } from './AdminOrders';
+
+import {
+  AdminCustomers,
+  AdminCoupons,
+  AdminBanners,
+  AdminReviews,
+  AdminNewsletter,
+  AdminMedia,
+  AdminSettings
+} from './AdminMisc';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
