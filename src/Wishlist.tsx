@@ -1,6 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { store, Product } from '../data/store';
-import { useStore } from './StoreContext';
+import { useStore } from './context/StoreContext';
 import { store, Product } from './store';
 
 export default function Wishlist() {
