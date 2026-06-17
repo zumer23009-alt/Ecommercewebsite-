@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import AdminLayout from '../../components/AdminLayout';
-import { store, Product, uid } from '../../data/store';
+import AdminLayout from './AdminLayout';
+import { store, Product, uid } from './store';
 
 export function AdminProductsList() {
   const data = store.load();
