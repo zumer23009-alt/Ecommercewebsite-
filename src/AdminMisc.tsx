@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AdminLayout from '../../components/AdminLayout';
+import AdminLayout from './AdminLayout';
 import { store, Customer, Coupon, Banner, Review, uid, Settings } from '../../data/store';
 
 // ============ CUSTOMERS ============
