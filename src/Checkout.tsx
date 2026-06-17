@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useStore } from './StoreContext';
+import { store } from './store';
 
 export default function Checkout() {
-  const { cart, cartTotal, placeOrder, currency, whatsapp, appliedCoupon } = useStore();
+  const { cart, cartTotal, placeOrder, currency, whatsapp, appliedCoupon } = store;
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
