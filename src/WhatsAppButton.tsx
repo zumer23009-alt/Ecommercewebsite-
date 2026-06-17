@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useStore } from '../context/StoreContext';
+import { useStore } from './StoreContext';
 
 export default function WhatsAppButton() {
   const [open, setOpen] = useState(false);
