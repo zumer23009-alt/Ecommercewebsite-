@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import { Product } from '../data/store';
+import { store, Product } from './store';
 import { useStore } from '../context/StoreContext';
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { addToCart, wishlist, toggleWishlist, currency } = useStore();
+  const { addToCart, wishlist, toggleWishlist, currency } = store;
   const inWishlist = wishlist.includes(product.id);
   const price = product.salePrice ?? product.price;
 
