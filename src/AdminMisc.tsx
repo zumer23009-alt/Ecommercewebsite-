@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import AdminLayout from './AdminLayout';
-import { store, Customer, Coupon, Banner, Review, uid, Settings } from '../../data/store';
+import { store, Customer, Coupon, Banner, Review, uid, Settings } from './store';
 
 // ============ CUSTOMERS ============
 export function AdminCustomers() {
