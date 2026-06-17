@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
 import { store, Product } from './store';
-import { useStore } from '../context/StoreContext';
-
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart, wishlist, toggleWishlist, currency } = store;
   const inWishlist = wishlist.includes(product.id);
