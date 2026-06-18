@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { store, applyCoupon } from './store';
+import { useStore } from './StoreContext';
 
 export default function Cart() {
-  const { cart, updateQty, removeFromCart, cartTotal, currency, applyCoupon, appliedCoupon, whatsapp } = useStore();
+  const { cart, updateQty, removeFromCart, cartTotal, settings, applyCoupon, appliedCoupon } = useStore();
   const [couponCode, setCouponCode] = useState('');
   const [couponMsg, setCouponMsg] = useState('');
   const navigate = useNavigate();
@@ -33,9 +33,9 @@ export default function Cart() {
   }
 
   const handleWhatsAppOrder = () => {
-    const items = cart.map((i) => `- ${i.product.name} (Taille: ${i.size}, Couleur: ${i.color}) x${i.qty} = ${((i.product.salePrice || i.product.price) * i.qty).toFixed(2)} ${currency}`).join('%0A');
-    const message = encodeURIComponent(`Bonjour! Je voudrais commander:%0A%0A${items}%0A%0ATotal: ${total.toFixed(2)} ${currency}`);
-    window.open(`https://wa.me/${whatsapp}?text=${message}`, '_blank');
+    const items = cart.map((i) => `- ${i.product.name} (Taille: ${i.size}, Couleur: ${i.color}) x${i.qty} = ${((i.product.salePrice || i.product.price) * i.qty).toFixed(2)} ${settings.currency}`).join('%0A');
+    const message = encodeURIComponent(`Bonjour! Je voudrais commander:%0A%0A${items}%0A%0ATotal: ${total.toFixed(2)} ${settings.currency}`);
+    window.open(`https://wa.me/${settings.whatsapp}?text=${message}`, '_blank');
   };
 
   return (
@@ -55,7 +55,7 @@ export default function Cart() {
                     <h3 className="font-serif font-semibold hover:text-amber-700 transition">{item.product.name}</h3>
                   </Link>
                   <div className="text-xs text-neutral-500 mt-1">Taille: {item.size} • Couleur: {item.color}</div>
-                  <div className="text-sm font-semibold mt-1">{price} {currency}</div>
+                  <div className="text-sm font-semibold mt-1">{price} {settings.currency}</div>
                   <div className="flex items-center justify-between mt-3">
                     <div className="inline-flex border border-neutral-300">
                       <button onClick={() => updateQty(item.product.id, item.size, item.color, item.qty - 1)} className="w-8 h-8 hover:bg-neutral-100">−</button>
@@ -67,7 +67,7 @@ export default function Cart() {
                     </button>
                   </div>
                 </div>
-                <div className="text-right font-semibold">{(price * item.qty).toFixed(2)} {currency}</div>
+                <div className="text-right font-semibold">{(price * item.qty).toFixed(2)} {settings.currency}</div>
               </div>
             );
           })}
@@ -95,11 +95,11 @@ export default function Cart() {
             {couponMsg && <p className={`text-xs mb-3 ${couponMsg.startsWith('✓') ? 'text-green-600' : 'text-red-600'}`}>{couponMsg}</p>}
 
             <div className="space-y-2 text-sm border-t border-neutral-200 pt-4">
-              <div className="flex justify-between"><span>Sous-total</span><span>{cartTotal.toFixed(2)} {currency}</span></div>
-              {appliedCoupon && <div className="flex justify-between text-green-700"><span>Coupon ({appliedCoupon.code})</span><span>-{discount.toFixed(2)} {currency}</span></div>}
-              <div className="flex justify-between"><span>Livraison</span><span>{shipping === 0 ? 'GRATUITE' : `${shipping.toFixed(2)} ${currency}`}</span></div>
+              <div className="flex justify-between"><span>Sous-total</span><span>{cartTotal.toFixed(2)} {settings.currency}</span></div>
+              {appliedCoupon && <div className="flex justify-between text-green-700"><span>Coupon ({appliedCoupon.code})</span><span>-{discount.toFixed(2)} {settings.currency}</span></div>}
+              <div className="flex justify-between"><span>Livraison</span><span>{shipping === 0 ? 'GRATUITE' : `${shipping.toFixed(2)} ${settings.currency}`}</span></div>
               <div className="flex justify-between font-bold text-lg border-t border-neutral-200 pt-3 mt-3">
-                <span>Total</span><span>{total.toFixed(2)} {currency}</span>
+                <span>Total</span><span>{total.toFixed(2)} {settings.currency}</span>
               </div>
             </div>
 

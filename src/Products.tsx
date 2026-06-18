@@ -1,7 +1,9 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { store, Product } from './store';
+import { useStore } from './StoreContext';
+import { Product } from './store';
 import ProductCard from './ProductCard';
+
 export default function Products() {
   const [params] = useSearchParams();
   const cat = params.get('cat') || '';
@@ -10,14 +12,14 @@ export default function Products() {
   const [sort, setSort] = useState('new');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
 
+  const { products, categories } = useStore();
+
   useEffect(() => {
     setCategory(cat);
   }, [cat]);
 
-  const data = store.load();
-
-  const products = useMemo(() => {
-    let list: Product[] = [...data.products];
+  const filteredProducts = useMemo(() => {
+    let list: Product[] = [...products];
     if (category) list = list.filter((p) => p.category === category);
     if (search) list = list.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
     list = list.filter((p) => {
@@ -28,7 +30,7 @@ export default function Products() {
     else if (sort === 'price-desc') list.sort((a, b) => (b.salePrice ?? b.price) - (a.salePrice ?? a.price));
     else if (sort === 'new') list.sort((a, b) => b.createdAt - a.createdAt);
     return list;
-  }, [data.products, category, search, sort, priceRange]);
+  }, [products, category, search, sort, priceRange]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
@@ -37,7 +39,7 @@ export default function Products() {
         <h1 className="font-serif text-3xl md:text-5xl font-bold">
           {category || 'Tous les Produits'}
         </h1>
-        <p className="text-sm text-neutral-500 mt-2">{products.length} produit(s) trouvé(s)</p>
+        <p className="text-sm text-neutral-500 mt-2">{filteredProducts.length} produit(s) trouvé(s)</p>
       </div>
 
       <div className="grid md:grid-cols-[260px_1fr] gap-8">
@@ -61,11 +63,11 @@ export default function Products() {
                   onClick={() => setCategory('')}
                   className={`w-full text-left ${!category ? 'text-amber-700 font-semibold' : 'text-neutral-700'}`}
                 >
-                  Tous ({data.products.length})
+                  Tous ({products.length})
                 </button>
               </li>
-              {data.categories.map((c) => {
-                const count = data.products.filter((p) => p.category === c.name).length;
+              {categories.map((c) => {
+                const count = products.filter((p) => p.category === c.name).length;
                 return (
                   <li key={c.id}>
                     <button
@@ -111,14 +113,14 @@ export default function Products() {
 
         {/* Products Grid */}
         <div>
-          {products.length === 0 ? (
+          {filteredProducts.length === 0 ? (
             <div className="text-center py-20 text-neutral-500">
               <p className="text-lg mb-2">Aucun produit trouvé</p>
               <p className="text-sm">Essayez d'autres critères de recherche</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-              {products.map((p) => (
+              {filteredProducts.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
             </div>

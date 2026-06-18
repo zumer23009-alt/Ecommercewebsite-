@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { store, Product } from './store';
+import { useNavigate } from 'react-router-dom';
+import { useStore } from './StoreContext';
+import { Product } from './store';
 import ProductCard from './ProductCard';
 
 export default function Home() {
-  const data = store.load();
+  const { products, banners, categories, reviews, settings } = useStore();
   const navigate = useNavigate();
   const [slide, setSlide] = useState(0);
-  const banners = data.banners.filter((b) => b.active);
+  const activeBanners = banners.filter((b) => b.active);
 
   useEffect(() => {
-    const t = setInterval(() => setSlide((s) => (s + 1) % banners.length), 5000);
+    const t = setInterval(() => setSlide((s) => (s + 1) % activeBanners.length), 5000);
     return () => clearInterval(t);
-  }, [banners.length]);
+  }, [activeBanners.length]);
 
-  const bestSellers = data.products.filter((p) => p.bestSeller).slice(0, 8);
-  const featured = data.products.filter((p) => p.featured).slice(0, 4);
-  const newArrivals = [...data.products].sort((a, b) => b.createdAt - a.createdAt).slice(0, 4);
-  const onSale = data.products.filter((p) => p.salePrice).slice(0, 4);
+  const bestSellers = products.filter((p) => p.bestSeller).slice(0, 8);
+  const featured = products.filter((p) => p.featured).slice(0, 4);
+  const newArrivals = [...products].sort((a, b) => b.createdAt - a.createdAt).slice(0, 4);
+  const onSale = products.filter((p) => p.salePrice).slice(0, 4);
 
   const instaImages = [
     'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&q=80',
@@ -33,7 +34,7 @@ export default function Home() {
       {/* Hero Slider */}
       <section className="relative bg-neutral-50 overflow-hidden">
         <div className="relative h-[70vh] min-h-[480px]">
-          {banners.map((b, i) => (
+          {activeBanners.map((b, i) => (
             <div
               key={b.id}
               className={`absolute inset-0 transition-opacity duration-1000 ${i === slide ? 'opacity-100' : 'opacity-0'}`}
@@ -54,7 +55,7 @@ export default function Home() {
                         DÉCOUVRIR LA COLLECTION
                       </button>
                       <a
-                        href={`https://wa.me/${data.settings.whatsapp}`}
+                        href={`https://wa.me/${settings.whatsapp}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="border-2 border-white text-white px-8 py-3.5 text-sm font-semibold tracking-wider hover:bg-white hover:text-black transition"
@@ -69,7 +70,7 @@ export default function Home() {
           ))}
         </div>
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-          {banners.map((_, i) => (
+          {activeBanners.map((_, i) => (
             <button
               key={i}
               onClick={() => setSlide(i)}
@@ -105,10 +106,10 @@ export default function Home() {
           <h2 className="font-serif text-3xl md:text-4xl font-bold">Explorez la Collection</h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {data.categories.map((c) => (
-            <Link
+          {categories.map((c) => (
+            <a
               key={c.id}
-              to={`/products?cat=${encodeURIComponent(c.name)}`}
+              href={`/products?cat=${encodeURIComponent(c.name)}`}
               className="group relative aspect-[3/4] overflow-hidden rounded-sm bg-neutral-100"
             >
               <img src={c.image} alt={c.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" />
@@ -120,7 +121,7 @@ export default function Home() {
                   VOIR LA COLLECTION →
                 </div>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </section>
@@ -133,9 +134,9 @@ export default function Home() {
               <div className="text-xs tracking-[0.3em] text-amber-600 mb-2">LES PLUS VENDUS</div>
               <h2 className="font-serif text-3xl md:text-4xl font-bold">Best Sellers</h2>
             </div>
-            <Link to="/products" className="text-sm font-semibold tracking-wider border-b-2 border-black pb-1 hover:text-amber-700 hover:border-amber-700 transition">
+            <a href="/products" className="text-sm font-semibold tracking-wider border-b-2 border-black pb-1 hover:text-amber-700 hover:border-amber-700 transition">
               TOUT VOIR →
-            </Link>
+            </a>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {bestSellers.map((p: Product) => (
@@ -233,10 +234,10 @@ export default function Home() {
             <h2 className="font-serif text-3xl md:text-4xl font-bold">Ce qu'elles disent de nous</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {data.reviews.filter((r) => r.approved).slice(0, 3).map((r) => (
+            {reviews.filter((r) => r.approved).slice(0, 3).map((r) => (
               <div key={r.id} className="bg-neutral-900 p-6 rounded-sm">
                 <div className="text-amber-400 mb-3">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</div>
-                <p className="text-neutral-300 text-sm italic mb-4">"{r.comment}"</p>
+                <p className="text-neutral-300 text-sm italic mb-4">\"'{r.comment}'\"</p>
                 <div className="text-xs font-semibold tracking-wider text-neutral-400">— {r.author}</div>
               </div>
             ))}
@@ -261,7 +262,7 @@ export default function Home() {
               >
                 <img src={img} alt={`Instagram ${i + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white">
-                  <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.07 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.849.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z" /></svg>
                 </div>
               </a>
             ))}
