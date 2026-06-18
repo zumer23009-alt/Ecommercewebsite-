@@ -42,4 +42,4 @@ export function useStore() {
     throw new Error('useStore must be used within a StoreProvider');
   }
   return context;
-    }
+}
