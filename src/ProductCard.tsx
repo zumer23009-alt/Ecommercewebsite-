@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
-import { store, Product } from './store';
+import { Product } from './store';
+import { useStore } from './StoreContext';
+
 export default function ProductCard({ product }: { product: Product }) {
-  const { addToCart, wishlist, toggleWishlist, currency } = store;
-  const inWishlist = wishlist.includes(product.id);
+  const { addToCart, wishlist, toggleWishlist, settings } = useStore();
+  const inWishlist = wishlist.includes(product.id as any);
   const price = product.salePrice ?? product.price;
 
   return (
@@ -27,7 +29,7 @@ export default function ProductCard({ product }: { product: Product }) {
           </span>
         )}
         <button
-          onClick={() => toggleWishlist(product.id)}
+          onClick={() => toggleWishlist(product.id as any)}
           className="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center hover:scale-110 transition"
           aria-label="Ajouter aux favoris"
         >
@@ -44,9 +46,9 @@ export default function ProductCard({ product }: { product: Product }) {
           </h3>
         </Link>
         <div className="flex items-center gap-2 mt-2">
-          <span className="font-semibold text-neutral-900">{price} {currency}</span>
+          <span className="font-semibold text-neutral-900">{price} {settings.currency}</span>
           {product.salePrice && (
-            <span className="text-xs text-neutral-400 line-through">{product.price} {currency}</span>
+            <span className="text-xs text-neutral-400 line-through">{product.price} {settings.currency}</span>
           )}
         </div>
         <button
