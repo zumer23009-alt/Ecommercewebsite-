@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { store } from './store';
+import { useStore } from './StoreContext';
 
 export default function Checkout() {
-  const { cart, cartTotal, placeOrder, currency, whatsapp, appliedCoupon } = store;
+  const { cart, cartTotal, placeOrder, settings, applyCoupon, appliedCoupon } = useStore();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -61,9 +61,9 @@ export default function Checkout() {
   const handleWhatsApp = () => {
     const items = cart.map((i) => `- ${i.product.name} (${i.size}/${i.color}) x${i.qty}`).join('%0A');
     const message = encodeURIComponent(
-      `Nouvelle commande!%0A%0ANom: ${form.name}%0ATéléphone: ${form.phone}%0AVille: ${form.city}%0AAdresse: ${form.address}%0A%0AArticles:%0A${items}%0A%0ATotal: ${total.toFixed(2)} ${currency}`
+      `Nouvelle commande!%0A%0ANom: ${form.name}%0ATéléphone: ${form.phone}%0AVille: ${form.city}%0AAdresse: ${form.address}%0A%0AArticles:%0A${items}%0A%0ATotal: ${total.toFixed(2)} ${settings.currency}`
     );
-    window.open(`https://wa.me/${whatsapp}?text=${message}`, '_blank');
+    window.open(`https://wa.me/${settings.whatsapp}?text=${message}`, '_blank');
   };
 
   if (submitted) {
@@ -72,7 +72,7 @@ export default function Checkout() {
         <div className="w-20 h-20 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-4xl mx-auto mb-6">✓</div>
         <h1 className="font-serif text-3xl md:text-4xl font-bold mb-3">Merci pour votre commande!</h1>
         <p className="text-neutral-600 mb-2">Numéro de commande: <strong>{submitted}</strong></p>
-        <p className="text-neutral-600 mb-8">Nous vous contacterons bientôt pour confirmer votre commande. Total: <strong>{total.toFixed(2)} {currency}</strong></p>
+        <p className="text-neutral-600 mb-8">Nous vous contacterons bientôt pour confirmer votre commande. Total: <strong>{total.toFixed(2)} {settings.currency}</strong></p>
         <div className="flex gap-3 justify-center flex-wrap">
           <button onClick={handleWhatsApp} className="bg-green-600 text-white px-6 py-3 text-sm font-semibold hover:bg-green-700 transition">
             💬 CONFIRMER SUR WHATSAPP
@@ -134,7 +134,7 @@ export default function Checkout() {
           </div>
 
           <button type="submit" className="w-full bg-black text-white py-4 text-sm font-semibold tracking-wider hover:bg-amber-500 hover:text-black transition">
-            CONFIRMER MA COMMANDE • {total.toFixed(2)} {currency}
+            CONFIRMER MA COMMANDE • {total.toFixed(2)} {settings.currency}
           </button>
           <Link to="/cart" className="block text-center text-sm text-neutral-500 underline">← Retour au panier</Link>
         </form>
@@ -154,18 +154,18 @@ export default function Checkout() {
                     <div className="flex-1">
                       <div className="font-medium text-xs">{item.product.name}</div>
                       <div className="text-[10px] text-neutral-500">{item.size} • {item.color}</div>
-                      <div className="text-xs font-semibold mt-1">{(price * item.qty).toFixed(2)} {currency}</div>
+                      <div className="text-xs font-semibold mt-1">{(price * item.qty).toFixed(2)} {settings.currency}</div>
                     </div>
                   </div>
                 );
               })}
             </div>
             <div className="space-y-2 text-sm border-t border-neutral-200 pt-4">
-              <div className="flex justify-between"><span>Sous-total</span><span>{cartTotal.toFixed(2)} {currency}</span></div>
-              {appliedCoupon && <div className="flex justify-between text-green-700"><span>Coupon</span><span>-{discount.toFixed(2)} {currency}</span></div>}
-              <div className="flex justify-between"><span>Livraison</span><span>{shipping === 0 ? 'GRATUITE' : `${shipping.toFixed(2)} ${currency}`}</span></div>
+              <div className="flex justify-between"><span>Sous-total</span><span>{cartTotal.toFixed(2)} {settings.currency}</span></div>
+              {appliedCoupon && <div className="flex justify-between text-green-700"><span>Coupon</span><span>-{discount.toFixed(2)} {settings.currency}</span></div>}
+              <div className="flex justify-between"><span>Livraison</span><span>{shipping === 0 ? 'GRATUITE' : `${shipping.toFixed(2)} ${settings.currency}`}</span></div>
               <div className="flex justify-between font-bold text-lg border-t border-neutral-200 pt-3 mt-3">
-                <span>Total</span><span>{total.toFixed(2)} {currency}</span>
+                <span>Total</span><span>{total.toFixed(2)} {settings.currency}</span>
               </div>
             </div>
           </div>

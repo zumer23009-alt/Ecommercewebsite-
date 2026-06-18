@@ -1,14 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from './StoreContext';
-import { store, Product } from './store';
+import { Product } from './store';
+import ProductCard from './ProductCard';
 
 export default function Wishlist() {
-  const { wishlist } = useStore();
-  const data = store.load();
+  const { wishlist, products } = useStore();
   const navigate = useNavigate();
-  const products = data.products.filter((p: Product) => wishlist.includes(p.id));
+  const wishlistProducts = products.filter((p: Product) => wishlist.includes(p.id as any));
 
-  if (products.length === 0) {
+  if (wishlistProducts.length === 0) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-20 text-center">
         <div className="text-6xl mb-4">♡</div>
@@ -24,9 +24,9 @@ export default function Wishlist() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       <h1 className="font-serif text-3xl md:text-4xl font-bold mb-2">Liste de souhaits</h1>
-      <p className="text-sm text-neutral-500 mb-8">{products.length} produit(s)</p>
+      <p className="text-sm text-neutral-500 mb-8">{wishlistProducts.length} produit(s)</p>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {products.map((p: Product) => (
+        {wishlistProducts.map((p: Product) => (
           <ProductCard key={p.id} product={p} />
         ))}
       </div>
