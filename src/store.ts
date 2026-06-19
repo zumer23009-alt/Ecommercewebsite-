@@ -297,7 +297,7 @@ const defaultReviews: Review[] = [
 // Helpers
 const LS_KEY = 'zeno_store_v1';
 
-type StoreData = {
+export type StoreData = {
   products: Product[];
   categories: Category[];
   orders: Order[];
